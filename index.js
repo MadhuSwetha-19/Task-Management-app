@@ -7,8 +7,8 @@ const generateHTML = (taskData) => `<div id = ${taskData.id} class="col-md-6 col
     <button class="btn btn-outline-info">
       <i class="fas fa-pencil-alt"></i>
     </button>
-    <button class="btn btn-outline-danger">
-      <i class="far fa-trash-alt"></i>
+    <button class="btn btn-outline-danger" name=${taskData.id}>
+      <i class="far fa-trash-alt" name=${taskData.id}></i>
     </button>
   </div>
   <div class="card-body">
@@ -83,6 +83,17 @@ const loadExistingCards = () => {
  
   return;
 };
+
+const deleteCard = (event) => {
+  const targetID = event.target.getAttribute("name");
+  const elementType = event.target.tagName;
+
+  const removeTask = globalTaskData.filter((task) => task.id !== targrtID);
+  globalTaskData = removeTask;
+  //update the localstorage
+  localStorage.setItem("taskyAC", JSON.stringify({ card: globalTaskData }));
+};
+
 //strigify
   //JS object -> JSON
 
