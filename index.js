@@ -7,8 +7,8 @@ const generateHTML = (taskData) => `<div id = ${taskData.id} class="col-md-6 col
     <button class="btn btn-outline-info">
       <i class="fas fa-pencil-alt"></i>
     </button>
-    <button class="btn btn-outline-danger" name=${taskData.id}>
-      <i class="far fa-trash-alt" name=${taskData.id}></i>
+    <button class="btn btn-outline-danger" name=${taskData.id} onclick="deleteCard.apply(this,arguments)">
+      <i class="far fa-trash-alt" name=${taskData.id} ></i>
     </button>
   </div>
   <div class="card-body">
@@ -25,6 +25,9 @@ const generateHTML = (taskData) => `<div id = ${taskData.id} class="col-md-6 col
   </div>
 </div>
 </div>`;
+
+const saveToLocalStorage = () =>
+localStorage.setItem("taskyAC", JSON.stringify({ card: globalTaskData }));
 
 const insertToDOM = (content) =>
     taskContainer.insertAdjacentHTML("beforeend", content);
@@ -43,7 +46,7 @@ const addNewCard = () => {
 globalTaskData.push(taskData);
 
 //update the localstorage
-localStorage.setItem("taskyAC", JSON.stringify({ card: globalTaskData }));
+saveToLocalStorage();
 
 //generate HTML code
 
@@ -88,10 +91,22 @@ const deleteCard = (event) => {
   const targetID = event.target.getAttribute("name");
   const elementType = event.target.tagName;
 
-  const removeTask = globalTaskData.filter((task) => task.id !== targrtID);
+  const removeTask = globalTaskData.filter((task) => task.id !== targetID);
   globalTaskData = removeTask;
+
   //update the localstorage
-  localStorage.setItem("taskyAC", JSON.stringify({ card: globalTaskData }));
+  saveToLocalStorage();
+
+  //access DOM to remove card
+  if(elementType === "BUTTON"){
+    return taskContainer.removeChild(
+      event.target.parentNode.parentNode.parentNode
+    );
+  }else{
+    return taskContainer.removeChild(
+      event.target.parentNode.parentNode.parentNode.parentNode
+    );
+  }
 };
 
 //strigify
