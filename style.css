@@ -11,4 +11,8 @@ body {
 p {
     font-family: "Poppins", sans-serif !important;
 }
-  
+
+.task__cards {
+  cursor: pointer;
+}
+
