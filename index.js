@@ -4,8 +4,8 @@ let globalTaskData = [];
 const generateHTML = (taskData) => `<div id = ${taskData.id} class="col-md-6 col-lg-4 my-3">
 <div class="card">
   <div class="card-header gap-2 d-flex justify-content-end">
-    <button class="btn btn-outline-info">
-      <i class="fas fa-pencil-alt"></i>
+    <button class="btn btn-outline-info" name=${taskData.id} onclick="editCard.apply(this,arguments)">
+      <i class="fas fa-pencil-alt" name=${taskData.id}></i>
     </button>
     <button class="btn btn-outline-danger" name=${taskData.id} onclick="deleteCard.apply(this,arguments)">
       <i class="far fa-trash-alt" name=${taskData.id} ></i>
@@ -109,8 +109,37 @@ const deleteCard = (event) => {
   }
 };
 
-//strigify
-  //JS object -> JSON
+const editCard = (event) => {
+  const targetID = event.target.getAttribute("name");
+  const elementType = event.target.tagName;
 
-  //parse
-  //JSON ->JS object
+  let taskTitle;
+  let taskType;
+  let taskDescription;
+  let parentElement;
+  let submitButton;
+
+  if(elementType === "BUTTON" ){
+    parentElement = event.target.parentNode.parentNode;    
+  }
+  else{
+    parentElement = event.target.parentNode.parentNode.parentNode;  
+  }
+  taskTitle = parentElement.childNodes[3].childNodes[3];
+  taskDescription = parentElement.childNodes[3].childNodes[5];
+  taskType = parentElement.childNodes[3].childNodes[7];
+  submitButton = parentElement.childNodes[5];
+
+  taskTitle.setAttribute("contenteditable", "true");
+  taskDescription.setAttribute("contenteditable", "true");
+  taskType.setAttribute("contenteditable", "true");
+  submitButton.innerHTML = "Save Changes"
+
+};
+//strigify
+//JS object -> JSON
+
+//parse
+//JSON ->JS object
+
+//contenteditable = "true"
