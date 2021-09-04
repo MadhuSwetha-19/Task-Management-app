@@ -21,7 +21,7 @@ const generateHTML = (taskData) => `<div id = ${taskData.id} class="col-md-6 col
     <span class="badge bg-primary"> ${taskData.type} </span>
   </div>
   <div class="card-footer ">
-    <button class="btn btn-outline-primary">Open Task</button>
+    <button class="btn btn-outline-primary" name=${taskData.id}>Open Task</button>
   </div>
 </div>
 </div>`;
@@ -156,17 +156,22 @@ const saveEdit = (event) => {
   const submitButton = parentElement.childNodes[5].childNodes[1];
 
   const updatedData = {
-    title: taskTitle,
-    type: taskType,
-    description :taskDescription,
+    title: taskTitle.innerHTML,
+    type: taskType.innerHTML,
+    description: taskDescription.innerHTML,
   };
+
+  console.log({updatedData,targetID});
   
-  globalTaskData.forEach((task) => {
+  const updatedGlobalTasks = globalTaskData.map((task) => {
     if(task.id === targetID){
-    return{...task, ...updatedData };
+     console.log({...task, ...updatedData});
+     return{...task, ...updatedData };
     }
     return task;
   });
+
+  globalTaskData = updatedGlobalTasks;
 
   saveToLocalStorage();
 
