@@ -109,8 +109,7 @@ const deleteCard = (event) => {
   }
 };
 
-const editCard = (event) => {
-  const targetID = event.target.getAttribute("name");
+const editCard = (event) => { 
   const elementType = event.target.tagName;
 
   let taskTitle;
@@ -128,12 +127,53 @@ const editCard = (event) => {
   taskTitle = parentElement.childNodes[3].childNodes[3];
   taskDescription = parentElement.childNodes[3].childNodes[5];
   taskType = parentElement.childNodes[3].childNodes[7];
-  submitButton = parentElement.childNodes[5];
+  submitButton = parentElement.childNodes[5].childNodes[1];
 
   taskTitle.setAttribute("contenteditable", "true");
   taskDescription.setAttribute("contenteditable", "true");
   taskType.setAttribute("contenteditable", "true");
-  submitButton.innerHTML = "Save Changes"
+  submitButton.setAttribute("onclick", "saveEdit.apply(this,arguments)");
+  submitButton.innerHTML = "Save Changes";
+
+};
+
+const saveEdit = (event) => {
+  const targetID = event.target.getAttribute("name");
+  const elementType = event.target.tagName;
+
+  let parentElement;  
+
+  if(elementType === "BUTTON" ){
+    parentElement = event.target.parentNode.parentNode;    
+  }
+  else{
+    parentElement = event.target.parentNode.parentNode.parentNode;  
+  }
+
+  const taskTitle = parentElement.childNodes[3].childNodes[3];
+  const taskDescription = parentElement.childNodes[3].childNodes[5];
+  const taskType = parentElement.childNodes[3].childNodes[7];
+  const submitButton = parentElement.childNodes[5].childNodes[1];
+
+  const updatedData = {
+    title: taskTitle,
+    type: taskType,
+    description :taskDescription,
+  };
+  
+  globalTaskData.forEach((task) => {
+    if(task.id === targetID){
+    return{...task, ...updatedData };
+    }
+    return task;
+  });
+
+  saveToLocalStorage();
+
+  taskTitle.setAttribute("contenteditable", "false");
+  taskDescription.setAttribute("contenteditable", "false");
+  taskType.setAttribute("contenteditable", "false");
+  submitButton.innerHTML = "Open Task";
 
 };
 //strigify
